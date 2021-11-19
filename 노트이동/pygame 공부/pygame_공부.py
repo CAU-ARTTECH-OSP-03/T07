@@ -1,6 +1,3 @@
-#스페이스바가 게임 시작이라고 하면, 게임이 시작되고 나서 노트가 왼쪽에서 오른쪽으로 움직이도록 먼저 만듬.
-#파이게임 창이 열리자마자 자동으로 노트가 움직이는 건 아직 모르겠습니다... 나중에 이 부분을 해결해야 할 것 같습니다..
-
 import pygame
 
 # 게임 초기화
@@ -44,7 +41,7 @@ ddrnote.move = 15
 color = (255, 255, 255)
 
 
-right_go = False
+right_go = True
 
 
 # SB 가 0 일 동안에는 계속 파이게임 창이 켜져있고, X 버튼을 누르면 SB가 1이 되게 만들어서, 파이게임 창에서 나가도록 (루프 탈출) 구현
@@ -54,20 +51,10 @@ while SB == 0:
     # FPS 설정
     clock.tick(60)
 
-    # 스페이스바 입력 감지 (스페이스바 = 시작 버튼)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             SB = 1
-        if event.type == pygame.KEYDOWN:            
-            if event.key == pygame.K_SPACE:
-                right_go = True
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                right_go = True
-
-                
-
-
+              
     # 입력, 시간에 따른 노트의 변화
     
     if right_go == True:
