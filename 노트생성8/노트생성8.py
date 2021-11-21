@@ -7,7 +7,10 @@ play = True
 SCREENHEIGHT = 400
 SCREENWIDTH = 800
 move = Rect(0,0,0,0)
-time1000ms = 0
+delay = 0
+#노트생성
+note = [pygame.image.load('Deemo_long.png') for i in range(33)] # 노트 수
+rectNote = [None for i in range(len(note))]
 
 #스크린생성
 pygame.init()
@@ -18,11 +21,11 @@ pygame.display.set_caption('노트랜덤생성')
 #시간def
 clock = pygame.time.Clock()
 
-def timeUpdate1000ms():
-    global time1000ms
-    time1000ms += 1
-    if time1000ms > 100: # 노트생성 딜레이
-        time1000ms = 0
+def delayUpdate(): #노트생성 딜레이 def
+    global delay  
+    delay += 1
+    if delay > 100: # 노트생성 딜레이 ex) 100 = 1000ms
+        delay = 0
         return True
     return False
 
@@ -30,7 +33,7 @@ def timeUpdate1000ms():
 #노트생성def
 
 def makeNote():
-    if timeUpdate1000ms():
+    if delayUpdate():
         index = random.randint(0, len(note)-1)
         if rectNote[index].x == -1:
             rectNote[index].y = random.randint(0, SCREENHEIGHT - 100)
@@ -48,15 +51,16 @@ def moveNote():
 
         SCREEN.blit(note[i], rectNote[i])
 
-#노트생성
-note = [pygame.image.load('Deemo_long.png') for i in range(33)] # 노트 수
 
-rectNote = [None for i in range(len(note))]
 
-for i in range(len(note)):
-    note[i] = pygame.transform.scale(note[i], (30, 100))
+
+
+for i in range(len(note)): #노트생성을 pygame 기본 rect에 저장
+    note[i] = pygame.transform.scale(note[i], (30, 100)) #노트 크기면화
     rectNote[i] = note[i].get_rect()
     rectNote[i].x = -1
+
+#while문
 
 while play:
     for event in pygame.event.get():
