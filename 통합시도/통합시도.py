@@ -11,8 +11,8 @@ delay = 0
 
 #바 생성
 bar=pygame.image.load("bar.png")  #원본캐릭터 사진 업로드  원하는 경로의 사진을 복사 붙여넣기
-bar_width,bar_height=30,80           #캐릭터 가로,세로  설정   가로:60  세로:120
-real_char=pygame.transform.scale(bar,(30,80))   #원본캐릭터에서에서 원하는 크기로 커스텀
+bar_width,bar_height=30,160           #캐릭터 가로,세로  설정   가로:60  세로:120
+real_char=pygame.transform.scale(bar,(30,160))   #원본캐릭터에서에서 원하는 크기로 커스텀
 xpos= 720    #바의 x좌표위치
 ypos= SCREENHEIGHT/2- bar_height/2 #바의 y좌표위치
 to_y = 0   #바가 y 좌표로 이동하는 정도
@@ -41,7 +41,7 @@ clock = pygame.time.Clock()
 def delayUpdate(): #노트생성 딜레이 def
     global delay  
     delay += 1
-    if delay > 100: # 노트생성 딜레이 ex) 100 = 1000ms
+    if delay > 232: # 노트생성 딜레이 ex) 100 = 1000ms
         delay = 0
         return True
     return False
