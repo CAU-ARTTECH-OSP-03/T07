@@ -36,6 +36,12 @@ line = pygame.image.load("line.png")
 line_x_pos = 740
 line_y_pos = 0
 
+#놓친 노트 이펙트
+noteF = pygame.image.load("Deemo_long.png")
+noteF = noteF.convert_alpha()
+rectNoteF = noteF.get_rect()
+rectNoteF.y = 740
+alpha = 255
 
 #시간def
 clock = pygame.time.Clock()
@@ -89,6 +95,18 @@ def judge():
     verdict = False
 
     
+#노트 판정 이펙트
+def endNote():
+    if verdict: #노트를 쳤을 때 이펙트
+
+    else: #반응 없이 지나치는 경우 (투명도 조절)
+        global alpha
+        rectNoteF.y = rectNote[i].y #시작하는 위치를 맞춰야하는데
+        noteF.set_alpha(alpha)
+        rectNoteF.x += 5
+        alpha -= 10
+        if alpha == 0:
+            return
 
 
 

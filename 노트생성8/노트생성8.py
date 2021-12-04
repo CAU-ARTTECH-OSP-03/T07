@@ -12,6 +12,12 @@ delay = 0
 note = [pygame.image.load('Deemo_long.png') for i in range(33)] # 노트 수
 rectNote = [None for i in range(len(note))]
 
+delNote1 = pygame.image.load('Deemo_long_1.png')
+delNote2 = pygame.image.load('Deemo_long_2.png')
+delNote3 = pygame.image.load('Deemo_long_3.png')
+delNote4 = pygame.image.load('Deemo_long_4.png')
+delNote5 = pygame.image.load('Deemo_long_5.png')
+
 #스크린생성
 pygame.init()
 
@@ -38,6 +44,7 @@ def delayUpdate(): #노트생성 딜레이 def
 
 #노트생성def
 
+
 def makeNote():
     if delayUpdate():
         index = random.randint(0, len(note)-1)
@@ -53,12 +60,13 @@ def moveNote():
             rectNote[i].x = -110  #오른쪽 끝으로 넘어가면 노트가 다시 x좌표 -110 부터 시작
         if rectNote[i].x == -1:
             continue
+        if rectNote[i].x == 720:  # 어떻게든 사라지는 모습...
+            delNote1_x = 720
+            delNote1_x += 5
 
         rectNote[i].x += 5 #노트속도
 
         SCREEN.blit(note[i], rectNote[i])
-
-
 
 
 
