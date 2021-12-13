@@ -32,7 +32,7 @@ class obj:
 
 
 ddrnote = obj()
-ddrnote.put_img("ddrnote.png")
+ddrnote.put_img("‪C:\git_opclass\teamproj\T07\노트이동\pygame 공부\ddrnote.png")
 ddrnote.change_size(80,80)
 ddrnote.x = size[0]/2 - ddrnote.sx/2
 ddrnote.y = size[1]/2 - ddrnote.sy/2
