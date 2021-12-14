@@ -247,9 +247,7 @@ for i in range(len(note)): #노트생성을 pygame 기본 rect에 저장
 
 
 while play:
-    g.run()
     player_health = 300
-    g.show_go_screen()
     dt=clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -283,8 +281,8 @@ while play:
     ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     #화면지우기
     SCREEN.fill((0, 0, 0))
-
-  
+    g.run()
+    g.show_go_screen()
     showscore(score_x, score_y)
     makeNote() #노트 생성
     moveNote() #노트 이동
