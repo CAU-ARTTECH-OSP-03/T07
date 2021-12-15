@@ -2,7 +2,7 @@ import pygame
 from pygame.rect import *
 import random
 import pygame as pg
-import sys
+#import sys
 
 # 변수
 play = True
@@ -30,6 +30,7 @@ bar_speed = 0.5  # 바의 속도
 # 노트생성
 note = [pygame.image.load('노트 프로토.png') for i in range(13)]  # 노트 수
 rectNote = [None for i in range(len(note))]
+
 for i in range(len(note)):  # 노트생성을 pygame 기본 rect에 저장
     note[i] = pygame.transform.scale(note[i], (30, 100))  # 노트 크기변화
     rectNote[i] = note[i].get_rect()
@@ -278,8 +279,6 @@ def endNoteT():  # 부서지는 노트
 
 
 # while문
-
-
 while play:
     player_health = 300
     dt = clock.tick(60)
