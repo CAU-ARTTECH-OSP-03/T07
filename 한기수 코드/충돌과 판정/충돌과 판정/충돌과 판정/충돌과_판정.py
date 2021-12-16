@@ -20,10 +20,15 @@ rectVerdictBar = verdictBar.get_rect()
 verdictBar_xpos = xpos - 20
 verdictBar_ypos = ypos
 
+### while문에 들어갈 내용
 
-
-            if event.type ==pygame.KEYDOWN and event.key ==pygame.K_SPACE: #스페이스바를 누를 때 verdictBar와 노트가 겹치면
+            if event.type ==pygame.KEYDOWN and event.key ==pygame.K_SPACE: #스페이스바를 누를 때 verdictBar와 노트가 겹치면 
                 if rect.top < ypos and (ypos + bar_height) < rect.bottom and rect.left < (verdictBar_xpos + 5) and (verdictBar_xpos + 5) < rect.right:
+                    rectNote[i].x = -607
+                    rectNote[i].y = random.randint(0, SCREENHEIGHT - 100)
+                    player_health += 20 
+                    score_value += 10
+
 
 
 
