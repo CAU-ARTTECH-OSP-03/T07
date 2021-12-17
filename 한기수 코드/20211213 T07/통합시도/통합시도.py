@@ -12,7 +12,7 @@ move = Rect(0,0,0,0)
 delay = 0
 score_x=100 #점수판 위치
 score_y=100
-verdict = False #판정 시작 종료를 True False로 했습니다. 스페이스바를 누르면 True로 바뀌고 함수 실행후 Flase
+#verdict = False #판정 시작 종료를 True False로 했습니다. 스페이스바를 누르면 True로 바뀌고 함수 실행후 Flase
 TITLE = "게임시작, 게임오버"
 FPS = 60
 
@@ -21,7 +21,7 @@ FPS = 60
 
 #바 생성
 bar=pygame.image.load("bar.png")  #원본캐릭터 사진 업로드  원하는 경로의 사진을 복사 붙여넣기
-bar_width,bar_height=20,160           #캐릭터 가로,세로  설정   가로:60  세로:120
+bar_width,bar_height=30,160           #캐릭터 가로,세로  설정   가로:60  세로:120
 real_char=pygame.transform.scale(bar,(30,160))   #원본캐릭터에서에서 원하는 크기로 커스텀
 xpos= 720    #바의 x좌표위치
 ypos= SCREENHEIGHT/2- bar_height/2 #바의 y좌표위치
@@ -29,10 +29,10 @@ to_y = 0   #바가 y 좌표로 이동하는 정도
 bar_speed=0.5 #바의 속도
 
 #verdictBar 생성
-verdictBar = pygame.image.load("투명.png")
-verdictBar_width = bar_width +20
+verdictBar = pygame.image.load("판정구역.png")
+verdictBar_width = bar_width +30
 verdictBar_height = bar_height
-verdictBar_char= pygame.transform.scale(verdictBar,(30,160))
+verdictBar_char= pygame.transform.scale(verdictBar,(50,160))
 rectVerdictBar = verdictBar.get_rect()
 verdictBar_xpos = xpos - 20
 verdictBar_ypos = ypos
@@ -120,18 +120,18 @@ def moveNote():
 
 #판정 def
 
-def judge():
-    global verdict
-    if verdict == True:
-       if 740 > rectNote[i].x > 700: #판정 범위
-            if ypos - 50 > rectNote[i].y + 50 > ypos + 210: #노트 높이 = 100, 바높이 = 160 
-               rectNote[i].x = -random.randint(607, 809)
-               rectNote[i].y = random.randint(0, SCREENHEIGHT - 100) #왼쪽 랜덤 좌표로 이동
-               #여기에 점수증가, 체력증가
-               #같은 형식으로 여러개 만들면 될 것같아요
+#def judge():
+#    global verdict
+#    if verdict == True:
+#       if 740 > rectNote[i].x > 700: #판정 범위
+#            if ypos - 50 > rectNote[i].y + 50 > ypos + 210: #노트 높이 = 100, 바높이 = 160 
+#               rectNote[i].x = -random.randint(607, 809)
+#               rectNote[i].y = random.randint(0, SCREENHEIGHT - 100) #왼쪽 랜덤 좌표로 이동
+#               #여기에 점수증가, 체력증가
+#               #같은 형식으로 여러개 만들면 될 것같아요
 
-               SCREEN.blit(note[i], rectNote[i])
-    verdict = False
+#               SCREEN.blit(note[i], rectNote[i])
+#    verdict = False
 
     
 #노트 판정 이펙트
@@ -149,15 +149,19 @@ def endNote():
 
 
 
-#충돌 def
-def Collision():   
+#판정 def
+def judge():   
     global score_value, player_health
-    for rect in rectNote:
-        if rect.y == -1:
+    for rectN in rectNote:
+        if rectN.x == -1:
             continue
-        if rectNote[i].y + 100 < ypos and (ypos + bar_height) < rectNote[i].y and rectNote[i].x  < (xpos + 5) and (xpos + 5) < rectNote[i].x : # 노트가 bar와 만날 때 체력 20과 점수 100을 깎음
-            player_health -= 20 
-            score_value -= 100 
+        if rectN.top < rectVerdictBar.bottom and rectVerdictBar.top < rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
+            rectN.x = -607 
+            rectN.y = random.randint(0, SCREENHEIGHT - 100)
+            player_health += 20 
+            score_value += 100 
+            break
+
 
 for i in range(len(note)): #노트생성을 pygame 기본 rect에 저장
     note[i] = pygame.transform.scale(note[i], (30, 100)) #노트 크기변화
@@ -187,12 +191,7 @@ while play:
             if event.key==pygame.K_LEFT:
                 score_value-=1
             if event.key ==pygame.K_SPACE: #스페이스바를 누르면 judge함수 실행
-                 if rectNote[i].y + 100 < ypos and (ypos + bar_height) < rectNote[i].y and rectNote[i].x < (verdictBar_xpos + 5) and (verdictBar_xpos + 5) < rectNote[i].x + 30:
-                     rectNote[i].y = -607
-                     rectNote[i].y = random.randint(0, SCREENHEIGHT - 100)
-                     player_health += 20 
-                     score_value += 10
-
+                  judge()
 
     if verdictBar_ypos < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
             verdictBar_ypos = 0
@@ -216,7 +215,6 @@ while play:
     showscore(score_x, score_y)
     makeNote() #노트 생성
     moveNote() #노트 이동
-    Collision()
 
     SCREEN.blit(line, (line_x_pos, line_y_pos))
     SCREEN.blit(real_char, (xpos, ypos))  #캐릭터 그리기
