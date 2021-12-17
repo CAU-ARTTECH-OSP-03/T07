@@ -214,12 +214,15 @@ def makeNote():
 
 # 노트이동def
 def moveNote():
+    global player_health, score_value
     makeNote()
 
     for i in range(len(note)):
         if rectNote[i].x > 800:  # 판정선 너머로 지나가면
-            rectNote[i].x = -607
+            rectNote[i].x = -609
             rectNote[i].y = random.randint(0, SCREENHEIGHT - 100)  # 오른쪽 끝으로 넘어가면 노트가 다시 랜덤 y 좌표  부터 시작
+            score_value -= 10      # 노트가 800에 도달하면 점수 10, 체력 10을 깎음
+            player_health -= 10
         if rectNote[i].x == -1:
             continue
 
