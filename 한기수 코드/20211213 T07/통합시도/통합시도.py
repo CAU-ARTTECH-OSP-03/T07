@@ -30,12 +30,10 @@ bar_speed=0.5 #바의 속도
 
 #verdictBar 생성
 verdictBar = pygame.image.load("판정구역.png")
-verdictBar_width = bar_width +30
-verdictBar_height = bar_height
-verdictBar_char= pygame.transform.scale(verdictBar,(50,160))
+verdictBar= pygame.transform.scale(verdictBar,(50+100,160))
 rectVerdictBar = verdictBar.get_rect()
-verdictBar_xpos = xpos - 20
-verdictBar_ypos = ypos
+rectVerdictBar.centerx = (720)
+rectVerdictBar.centery = (SCREENHEIGHT/2)
 
 
 #노트생성
@@ -155,7 +153,7 @@ def judge():
     for rectN in rectNote:
         if rectN.x == -1:
             continue
-        if rectN.top > rectVerdictBar.bottom and rectVerdictBar.top > rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
+        if rectN.top < rectVerdictBar.bottom and rectVerdictBar.top < rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
             rectN.x = -607 
             rectN.y = random.randint(0, SCREENHEIGHT - 100)
             player_health += 20 
@@ -193,14 +191,13 @@ while play:
             if event.key ==pygame.K_SPACE: #스페이스바를 누르면 judge함수 실행
                   judge()
 
-    if verdictBar_ypos < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
-            verdictBar_ypos = 0
+    if rectVerdictBar.y < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
+            rectVerdictBar.y = 0
 
 
-    elif verdictBar_ypos > SCREENHEIGHT - bar_height:   #캐릭터가 창을 넘어가려하면 멈춤
-            verdictBar_ypos = SCREENHEIGHT - bar_height
+    elif rectVerdictBar.y > SCREENHEIGHT-rectVerdictBar.height:   #캐릭터가 창을 넘어가려하면 멈춤
+            rectVerdictBar.y = SCREENHEIGHT-rectVerdictBar.height
 
-    verdictBar_ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
 
     if ypos < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
             ypos = 0
@@ -209,8 +206,9 @@ while play:
     elif ypos > SCREENHEIGHT - bar_height:   #캐릭터가 창을 넘어가려하면 멈춤
             ypos= SCREENHEIGHT - bar_height
 
-
+    
     ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
+    rectVerdictBar.y += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     #화면지우기
     SCREEN.fill((0, 0, 0))
     showscore(score_x, score_y)
@@ -220,7 +218,7 @@ while play:
 
     SCREEN.blit(line, (line_x_pos, line_y_pos))
     SCREEN.blit(real_char, (xpos, ypos))  #캐릭터 그리기
-    SCREEN.blit(verdictBar_char, (verdictBar_xpos, verdictBar_ypos))
+    SCREEN.blit(verdictBar, rectVerdictBar)
 
     pygame.display.flip()
 
