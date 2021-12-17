@@ -22,9 +22,6 @@ def judge():
             player_health += 20 
             score_value += 100 
             break
-        else:
-            continue
-
 #verdictBar 생성
 verdictBar = pygame.image.load("판정구역.png")
 verdictBar_width = bar_width +30
