@@ -16,7 +16,7 @@ def judge():
     for rectN in rectNote:
         if rectN.x == -1:
             continue
-        if rectN.top < rectVerdictBar.bottom and rectVerdictBar.top < rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
+        if rectN.top > rectVerdictBar.bottom and rectVerdictBar.top > rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
             rectN.x = -607 
             rectN.y = random.randint(0, SCREENHEIGHT - 100)
             player_health += 20 

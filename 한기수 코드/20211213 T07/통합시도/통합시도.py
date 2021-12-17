@@ -155,7 +155,7 @@ def judge():
     for rectN in rectNote:
         if rectN.x == -1:
             continue
-        if rectN.top < rectVerdictBar.bottom and rectVerdictBar.top < rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
+        if rectN.top > rectVerdictBar.bottom and rectVerdictBar.top > rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
             rectN.x = -607 
             rectN.y = random.randint(0, SCREENHEIGHT - 100)
             player_health += 20 
@@ -209,12 +209,14 @@ while play:
     elif ypos > SCREENHEIGHT - bar_height:   #캐릭터가 창을 넘어가려하면 멈춤
             ypos= SCREENHEIGHT - bar_height
 
+
     ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     #화면지우기
     SCREEN.fill((0, 0, 0))
     showscore(score_x, score_y)
     makeNote() #노트 생성
     moveNote() #노트 이동
+
 
     SCREEN.blit(line, (line_x_pos, line_y_pos))
     SCREEN.blit(real_char, (xpos, ypos))  #캐릭터 그리기
