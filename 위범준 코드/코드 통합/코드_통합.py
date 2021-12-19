@@ -5,6 +5,7 @@ import cv2
 import mediapipe as mp
 
 
+
 #변수
 play = True
 SCREENHEIGHT = 400
@@ -12,7 +13,9 @@ SCREENWIDTH = 800
 move = Rect(0,0,0,0) 
 delay = 0
 score_x=100 #점수판 위치
-score_y=100
+score_y=10
+HP_x = 100
+HP_y = 60
 
 
 #시간def
@@ -23,15 +26,27 @@ clock = pygame.time.Clock()
 pygame.init()
 
 SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-pygame.display.set_caption('통합')
+pygame.display.set_caption('모션 벽돌깨기')
 
 #점수판 세팅
 score_value=0  #점수판 점수
 font=pygame.font.Font("freesansbold.ttf",30) #점수판 글씨 폰트
 #점수판 생성함수
 def showscore(x, y):
-    score = font.render("score:"+str(score_value), True, "red")
+    score = font.render("score:"+str(score_value), True, "white")
     SCREEN.blit(score,(x,y))
+
+#체력 세팅
+player_health = 100  #체력
+font2=pygame.font.Font("freesansbold.ttf",40) #빨간색 체력 글씨 폰트 (체력이 빨간색이 됐을 때 글씨 크기를 키움)
+#체력 생성함수
+def showHP(x, y):
+    HP = font.render("HP:"+str(player_health), True, "white")
+    if player_health < 31:
+        HP = font2.render("HP:"+str(player_health), True, "red")
+    SCREEN.blit(HP,(x,y))
+
+
 
 # 바 생성
 bar = pygame.image.load("bar.png")  # 원본캐릭터 사진 업로드  원하는 경로의 사진을 복사 붙여넣기
@@ -40,7 +55,7 @@ real_char = pygame.transform.scale(bar, (20, 60))  # 원본캐릭터에서에서
 xpos = 730 # 바의 x좌표위치
 ypos = (SCREENHEIGHT / 2) - (bar_height / 2)  # 바의 y좌표위치
 to_y = 0  # 바가 y 좌표로 이동하는 정도
-bar_speed = 0.25  # 바의 속도
+bar_speed = 0.3  # 바의 속도
 
 #판정선 생성
 line = pygame.image.load("line.png")
@@ -87,7 +102,7 @@ def moveNote():
             rectNote[i].x = -607
             rectNote[i].y = random.randint(0, SCREENHEIGHT - 100)  #오른쪽 끝으로 넘어가면 노트가 다시 랜덤 y 좌표  부터 시작
             score_value -= 50      # 노트가 800에 도달하면 점수 50, 체력 10을 깎음
-            player_health -= 10           
+            player_health -= 10         
         if rectNote[i].x == -1:
             continue
 
@@ -141,15 +156,14 @@ def judge():
         if rectN.top < rectVerdictBar.bottom and rectVerdictBar.top < rectN.bottom and rectN.left < rectVerdictBar.right and rectVerdictBar.left < rectN.right: # 노트가 판정bar와 만날 때 체력 20과 점수 100을 올림
             rectN.x = -607 
             rectN.y = random.randint(0, SCREENHEIGHT - 100)
-            player_health += 20 
+            player_health += 10 
             score_value += 100 
             
             key = True
-            endNoteT()
-            #key = False
+            endNoteT()        
             break
 
-    print("판정함수 실행됨")
+    
 
 #--------모션-------------------
 mp_drawing = mp.solutions.drawing_utils
@@ -175,7 +189,7 @@ def endNoteT():  # 부서지는 노트
         image = noteTs[int(frame_index)]
 
         SCREEN.blit(image, rectNoteT)
-    print("이펙트함수 실행됨")
+    
 
 
 #========================================================================================
@@ -189,7 +203,7 @@ def endNoteT():  # 부서지는 노트
 #while문
 
 while play:
-    player_health = 300
+    #player_health = 300
     to_y = 0
     dt = clock.tick(60)
     #화면지우기
@@ -277,14 +291,21 @@ while play:
 
     ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     rectVerdictBar.y += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
-    
+
     showscore(score_x, score_y)
+    showHP(HP_x, HP_y)
     makeNote()  # 노트 생성
     moveNote() # 노트 이동
 
     SCREEN.blit(line, (line_x_pos, line_y_pos))
     SCREEN.blit(real_char, (xpos, ypos))  # 캐릭터 그리기 # real_char는 바 이미지를 의미
     SCREEN.blit(verdictBar, rectVerdictBar)
+
+    if player_health <0:
+        SCREEN.fill((0, 0, 0))
+        play = False
+        
+
 
     pygame.display.flip()
 
@@ -298,3 +319,5 @@ cap.release()
 cv2.destroyAllWindows()
 # --------------------------------------    
 pygame.quit()
+
+
