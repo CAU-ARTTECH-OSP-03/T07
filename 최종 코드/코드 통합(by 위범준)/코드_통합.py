@@ -124,6 +124,7 @@ cap = cv2.VideoCapture(0)
 
 
 
+
 #while문
 
 while play:
@@ -185,7 +186,7 @@ while play:
                     status = "up"
                     to_y = -bar_speed
                     print(status)
-                elif y > CamHeight * (2/3):
+                elif y > CamHeight * (1.5/3):
                     status = "down"
                     to_y = +bar_speed
                     print(status)

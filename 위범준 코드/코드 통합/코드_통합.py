@@ -122,6 +122,11 @@ mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 #-------------------------------------
 
+#---------음악-------------------
+pygame.mixer.init()
+pygame.mixer.music.load("Winner_Winner_Funky_Chicken_Dinner.mp3")
+pygame.mixer.music.play()
+#------------음악-----------------
 
 
 #while문
@@ -133,6 +138,9 @@ while play:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             play = False
+            #----음악멈춤--------
+            pygame.mixer.music.stop()
+            #-----------------
         if event.type == pygame.MOUSEBUTTONDOWN:  # 마우스가 눌렸는지
             if event.button == 4:  # 마우스휠 올리기
                 to_y = -bar_speed  # 캐릭터를 위로 캐릭터의 속도만큼 올리기
