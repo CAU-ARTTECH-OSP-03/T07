@@ -228,7 +228,7 @@ def show_start_screen():
         # game splash/start screen
         SCREEN.fill(BLACK)
         draw_text(TITLE, 48, WHITE, SCREENWIDTH/2, SCREENHEIGHT/4)
-        draw_text("Motion : Moving bar, Space : Break note",
+        draw_text("Motion : Moving bar, Random Key : Break note",
                        22, WHITE, SCREENWIDTH/2, SCREENHEIGHT/2)
         draw_text("Press any key to play",
                        22, WHITE, SCREENWIDTH/2, SCREENHEIGHT*3/4)
