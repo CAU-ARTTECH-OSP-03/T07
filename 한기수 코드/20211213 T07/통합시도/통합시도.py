@@ -173,10 +173,17 @@ for i in range(len(note)): #노트생성을 pygame 기본 rect에 저장
 while play:
     player_health = 300
     dt=clock.tick(60)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    if player_health <= 0:
+        screen.fill(BLACK)
+        draw_text("GAME OVER", 48, WHITE, SCREENWIDTH/2, SCREENHEIGHT/4)
+        draw_text("Press any key to play again",
+                       22, WHITE, SCREENWIDTH/2, SCREENHEIGHT*3/4)
+        pg.display.flip()
+    if player_health >0:
+        for event in pygame.event.get():
+         if event.type == pygame.QUIT:
             play = False
-        if event.type ==pygame.MOUSEBUTTONDOWN: #마우스가 눌렸는지
+         if event.type ==pygame.MOUSEBUTTONDOWN: #마우스가 눌렸는지
             if event.button == 4:   #마우스휠 올리기
                 to_y = -bar_speed #캐릭터를 위로 캐릭터의 속도만큼 올리기
             if event.button == 5:    #마우스휠내리기
@@ -190,36 +197,35 @@ while play:
                 score_value-=1
             if event.key ==pygame.K_SPACE: #스페이스바를 누르면 judge함수 실행
                   judge()
-
-    if rectVerdictBar.y < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
+        if rectVerdictBar.y < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
             rectVerdictBar.y = 0
 
 
-    elif rectVerdictBar.y > SCREENHEIGHT-rectVerdictBar.height:   #캐릭터가 창을 넘어가려하면 멈춤
+        elif rectVerdictBar.y > SCREENHEIGHT-rectVerdictBar.height:   #캐릭터가 창을 넘어가려하면 멈춤
             rectVerdictBar.y = SCREENHEIGHT-rectVerdictBar.height
 
 
-    if ypos < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
+        if ypos < 0:        #캐릭터가 창을 넘어가려 하면 멈춤
             ypos = 0
 
 
-    elif ypos > SCREENHEIGHT - bar_height:   #캐릭터가 창을 넘어가려하면 멈춤
+        elif ypos > SCREENHEIGHT - bar_height:   #캐릭터가 창을 넘어가려하면 멈춤
             ypos= SCREENHEIGHT - bar_height
 
     
-    ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
-    rectVerdictBar.y += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
+        ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
+        rectVerdictBar.y += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     #화면지우기
-    SCREEN.fill((0, 0, 0))
-    showscore(score_x, score_y)
-    makeNote() #노트 생성
-    moveNote() #노트 이동
+        SCREEN.fill((0, 0, 0))
+        showscore(score_x, score_y)
+        makeNote() #노트 생성
+        moveNote() #노트 이동
 
 
-    SCREEN.blit(line, (line_x_pos, line_y_pos))
-    SCREEN.blit(real_char, (xpos, ypos))  #캐릭터 그리기
-    SCREEN.blit(verdictBar, rectVerdictBar)
+        SCREEN.blit(line, (line_x_pos, line_y_pos))
+        SCREEN.blit(real_char, (xpos, ypos))  #캐릭터 그리기
+        SCREEN.blit(verdictBar, rectVerdictBar)
 
-    pygame.display.flip()
+        pygame.display.flip()
 
 pygame.quit()
