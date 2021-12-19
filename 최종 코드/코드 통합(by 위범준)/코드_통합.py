@@ -35,12 +35,12 @@ def showscore(x, y):
 
 # 바 생성
 bar = pygame.image.load("bar.png")  # 원본캐릭터 사진 업로드  원하는 경로의 사진을 복사 붙여넣기
-bar_width, bar_height = 20, 100  # 캐릭터 가로,세로  설정   가로:20  세로:100
-real_char = pygame.transform.scale(bar, (20, 100))  # 원본캐릭터에서에서 원하는 크기로 커스텀
+bar_width, bar_height = 20, 60  # 캐릭터 가로,세로  설정   가로:20  세로:100
+real_char = pygame.transform.scale(bar, (20, 60))  # 원본캐릭터에서에서 원하는 크기로 커스텀
 xpos = 730 # 바의 x좌표위치
 ypos = (SCREENHEIGHT / 2) - (bar_height / 2)  # 바의 y좌표위치
 to_y = 0  # 바가 y 좌표로 이동하는 정도
-bar_speed = 0.5  # 바의 속도
+bar_speed = 0.25  # 바의 속도
 
 #판정선 생성
 line = pygame.image.load("line.png")
@@ -53,7 +53,7 @@ rectNote = [None for i in range(len(note))] # None을 note(리스트)의 길이 
 
 #노트생성을 pygame 기본 rect에 저장
 for i in range(len(note)): 
-    note[i] = pygame.transform.scale(note[i], (30, 100)) #노트 크기변화
+    note[i] = pygame.transform.scale(note[i], (60, 50)) #노트 크기변화
     rectNote[i] = note[i].get_rect() #노트의 x,y좌표 정보
     rectNote[i].x = -1
 
@@ -63,7 +63,7 @@ for i in range(len(note)):
 def delayUpdate():
     global delay  
     delay += 1
-    if delay > 200: # 노트생성 딜레이 ex) 100 = 1000ms = 1s # 이 숫자를 줄이면 노트가 더 많이 쏟아짐
+    if delay > 300: # 노트생성 딜레이 ex) 100 = 1000ms = 1s # 이 숫자를 줄이면 노트가 더 많이 쏟아짐
         delay = 0
         return True
     return False
@@ -91,13 +91,42 @@ def moveNote():
         if rectNote[i].x == -1:
             continue
 
-        rectNote[i].x += 10 #노트속도
+        rectNote[i].x += 15 #노트속도
 
         SCREEN.blit(note[i], rectNote[i])
-   
+
+#=======================================================================================   
+# 놓친 노트 이펙트
+noteF = pygame.image.load("노트 프로토.png")
+#noteF = noteF.convert_alpha()
+noteF_width, noteF_height = 60, 50
+noteF = pygame.transform.scale(noteF, (60, 50))  # 노트 크기변화
+rectNoteF = noteF.get_rect()
+rectNoteF.x = 740 - noteF_width / 2  # 이펙트가 발생하는 x좌표 고정
+alpha = 255
+
+
+# 판정 노트 이펙트
+noteTs = [pygame.image.load("노트 프로토.png"),
+          pygame.image.load("깨진 노트 프로토1.png"),
+          pygame.image.load("깨진 노트 프로토2.png"),
+          pygame.image.load("깨진 노트 프로토3.png"), 
+          pygame.image.load("깨진 노트 프로토4.png")]
+for i in range(len(noteTs)):
+    noteTs[i] = pygame.transform.scale(noteTs[i], (60, 50))  # 노트 크기변화
+    image = noteTs[i]
+    rectNoteT = image.get_rect()
+    rectNoteT.x = 698
+frame_index = 0
+animation_speed = 0.5
+key = False
+
+#======================================================================================
+
+
 #verdictBar 생성
 verdictBar = pygame.image.load("투명.png")
-verdictBar= pygame.transform.scale(verdictBar,(10,100))
+verdictBar= pygame.transform.scale(verdictBar,(5,60))
 rectVerdictBar = verdictBar.get_rect()
 rectVerdictBar.centerx = (720)
 rectVerdictBar.centery = (SCREENHEIGHT/2)
@@ -105,7 +134,7 @@ rectVerdictBar.centery = (SCREENHEIGHT/2)
 
 #판정 def
 def judge():   
-    global score_value, player_health
+    global score_value, player_health, key
     for rectN in rectNote:
         if rectN.x == -1:
             continue
@@ -114,13 +143,46 @@ def judge():
             rectN.y = random.randint(0, SCREENHEIGHT - 100)
             player_health += 20 
             score_value += 100 
+            
+            key = True
+            endNoteT()
+            #key = False
             break
+
+    print("판정함수 실행됨")
 
 #--------모션-------------------
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 #-------------------------------------
+
+#===================================================================================
+def endNoteT():  # 부서지는 노트
+    global frame_index
+    global animation_speed
+    global key
+
+    rectNoteT.y = ypos + 5  # 노트의 y좌표 받는 게 관건일 것 같아요
+
+    # loop over frame index
+    if key is True:
+        frame_index += animation_speed
+        if frame_index >= len(noteTs):
+            frame_index = 0
+            key = False
+
+        image = noteTs[int(frame_index)]
+
+        SCREEN.blit(image, rectNoteT)
+    print("이펙트함수 실행됨")
+
+
+#========================================================================================
+
+
+
+
 
 
 
@@ -130,6 +192,8 @@ while play:
     player_health = 300
     to_y = 0
     dt = clock.tick(60)
+    #화면지우기
+    SCREEN.fill((0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             play = False
@@ -141,6 +205,7 @@ while play:
         if event.type==pygame.KEYDOWN:
             if event.key ==pygame.K_SPACE: #스페이스바를 누르면 judge함수 실행
                   judge()
+
  
     ###---------모션------------------------------------------------
     with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
@@ -212,8 +277,7 @@ while play:
 
     ypos += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
     rectVerdictBar.y += to_y * dt  # 캐릭터의 포지션을 y만큼 실제 움직임 프레임수(dt)만큼 곱해서 보정
-    #화면지우기
-    SCREEN.fill((0, 0, 0))
+   
     showscore(score_x, score_y)
     makeNote()  # 노트 생성
     moveNote() # 노트 이동
@@ -235,7 +299,3 @@ cv2.destroyAllWindows()
 # --------------------------------------    
 pygame.quit()
 
-
-# 추후에 추가해야 할 것 : 체력바, 이펙트
-# 가능하다면 구현하기 (시간관계상...) : 게임시작, 오버 화면
-# openCV를 쓰면 렉이 걸리는거는 어쩔 수 없는 것 같습니다..

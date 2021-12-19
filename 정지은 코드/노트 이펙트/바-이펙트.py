@@ -130,18 +130,18 @@ def judge():
             break
 
 
-# 노트 판정 이펙트 # 작동안함
-def endNote():  # 지나가는 노트
-    global key
-    ##   if verdict: # 노트를 쳤을 때 이펙트
-    if key is False and rectNote[i].x < -1:  # 반응 없이 지나치는 경우 (투명도 조절)
-        global alpha
-        rectNoteF.y = 150  # 시작하는 위치를 맞춰야하는데
-        noteF.set_alpha(alpha)
-        rectNoteF.x += 5
-        alpha -= 10
-        if alpha == 0:
-            return
+## 노트 판정 이펙트 # 작동안함
+#def endNote():  # 지나가는 노트
+#    global key
+#    ##   if verdict: # 노트를 쳤을 때 이펙트
+#    if key is False and rectNote[i].x < -1:  # 반응 없이 지나치는 경우 (투명도 조절)
+#        global alpha
+#        rectNoteF.y = 150  # 시작하는 위치를 맞춰야하는데
+#        noteF.set_alpha(alpha)
+#        rectNoteF.x += 5
+#        alpha -= 10
+#        if alpha == 0:
+#            return
 
 def endNoteT():  # 부서지는 노트
     global frame_index
